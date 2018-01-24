@@ -3,55 +3,119 @@ using namespace std;
 #include <fstream>
 #include <string.h>
 #include <iostream>
+#include <cmath>
 
-//int ClParser::read_txt(ifstream &input){
-//    char buffer[100];
-//    int counter = 0;
-//    char zeichen;
-//    enum readstate {r_id, r_iso, r_date, r_format};
-//    enum readstate state;
+//Opens file with filename xml
+//Parses file until line with "film id" is found
+//Checks if film id is equal to object.id
+//If false, keeps parsing file
+//If true starts to fill member variables according to state
+//In ISO-State (state = 3), calculates push/pull-factor from iso and iso_used
+int ClParser::read_xml(string xml){
+    int state = 0;
+    int n = 0;
+    char buffer[100];
+    string a, b;
+    string line;
+    ifstream input_xml;
+    input_xml.open(xml);
 
-//    for (input.get(zeichen), state = r_id; !input.eof(); input.get(zeichen)){
-//        switch(zeichen){
-//            case ';':
-//                switch(state){
-//                    case r_id:
-//                        buffer[counter] = '\0';
-//                        strcpy(id,buffer);
-//                        state = r_iso;
-//                        counter = 0;
-//                        break;
-//                    case r_iso:
-//                        buffer[counter] = '\0';
-//                        strcpy(iso_used,buffer);
-//                        state = r_date;
-//                        counter = 0;
-//                        break;
-//                    case r_date:
-//                        buffer[counter] = '\0';
-//                        strcpy(date,buffer);
-//                        state = r_format;
-//                        counter = 0;
-//                        break;
-//                    case r_format:
-//                        buffer[counter] = '\0';
-//                        strcpy(format,buffer);
-//                        counter = 0;
-//                        break;
-//                }
-//                break;
-//            default:
-//                buffer[counter] = zeichen;
-//                counter++;
-//                break;
-//        }
-//    }
-//    return 1;
-//}
+    while(getline(input_xml, line)){
+        if(line.find("film id") != string::npos && state == 0){
+            line.erase(0, line.find('"') + 1);
+            for(int i = 0; i < int(line.find('"')); i++){
+                buffer[n] = line[i];
+                n++;
+            }
+            buffer[n] = '\0';
+            n = 0;
+            a = buffer;
+            b = id;
+            if(a == b){
+                state = 1;
+            }
+        }else{
+            switch(state){
+            case 1:
+                line.erase(0, line.find('>') + 1);
+                for(int i = 0; i < int(line.find('<')); i++){
+                    buffer[n] = line[i];
+                    n++;
+                }
+                buffer[n] = '\0';
+                n = 0;
+                strcpy(brand, buffer);
+                state = 2;
+                break;
+
+            case 2:
+                line.erase(0, line.find('>') + 1);
+                for(int i = 0; i < int(line.find('<')); i++){
+                    buffer[n] = line[i];
+                    n++;
+                }
+                buffer[n] = '\0';
+                n = 0;
+                strcpy(type, buffer);
+                state = 3;
+                break;
+
+            case 3:
+                line.erase(0, line.find('>') + 1);
+                for(int i = 0; i < int(line.find('<')); i++){
+                    buffer[n] = line[i];
+                    n++;
+                }
+                buffer[n] = '\0';
+                n = 0;
+                strcpy(iso, buffer);
+
+                if(atoi(iso_used) / atoi(iso) == 1){
+                    strcpy(pfactor,"0");
+
+//TODO: figure out a way to write calculation result into string.
+//                }else if(atoi(iso_used) / atoi(iso) > 1){
+//                    strcpy(pfactor,"+N");
+//                }else{
+//                    strcpy(pfactor,"-N");
+                }
+
+                state = 4;
+                break;
+
+            case 4:
+                line.erase(0, line.find('>') + 1);
+                for(int i = 0; i < int(line.find('<')); i++){
+                    buffer[n] = line[i];
+                    n++;
+                }
+                buffer[n] = '\0';
+                n = 0;
+                strcpy(color, buffer);
+                state = 0;
+                break;
+            }
+        }
+    }
+    return 1;
+}
 
 int ClParser::read_txt(string line){
     int n = 0;
     char buffer[20];
+
+    //Checks if line is valid, skips if invalid
+    for(int i = 0; i < int(line.size()); i++){
+        if(line[i] == ';') n++;
+    }
+    if(n < 3){
+        return 0;
+    }
+    n = 0;
+    //Parses line from txt file
+    //Reads to first semicolon and writes into corresponding (by state) member variable
+    //Then erases everything up to and including that semicolon and starts over
+    //Last entry for format not necessary, defaults to 135
     for(int state = 0; state < 4; state++){
         for(int i = 0; i < int(line.find(";")); i++){
             buffer[n] = line[i];
@@ -85,8 +149,18 @@ int ClParser::read_txt(string line){
 }
 
 void ClParser::print(){
-    cout << "ID:       " << id << endl;
-    cout << "ISO used: " << iso_used << endl;
-    cout << "Date:     " << date << endl;
-    cout << "Format:   " << format << endl;
+    cout << "Brand:        " << brand << endl;
+    cout << "Type:         " << type << endl;
+    cout << "ISO/used:     " << iso << "/" << iso_used << endl;
+    cout << "Color:        " << color << endl;
+    cout << "Format:       " << format << endl;
+    cout << "Date:         " << date << endl;
+    if(pfactor[0] == '+'){
+        cout << "Push/Pull:    Pushed by " << pfactor << " stops." << endl;
+    }else if(pfactor[0] == '-'){
+        cout << "Push/Pull:    Pulled by " << pfactor << " stops." << endl;
+    }else{
+        cout << "Push/Pull:    Shot at box speed." << endl;
+    }
+    cout << "-----------------" << endl;
 }

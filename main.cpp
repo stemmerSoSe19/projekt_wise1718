@@ -6,17 +6,26 @@ using namespace std;
 #include "cllist.h"
 
 int main(){
+    int errors = 0;
     ClList *list;
     list = new ClList;
-    ifstream input;
+    ifstream input_txt;
     string line;
-    input.open("myList.txt");
+    string xml = "films.xml";
+    string txt = "myList.txt";
+    input_txt.open(txt);
 
+    while (getline(input_txt, line)){
+        if(list->createItem(line, xml) == 0) errors ++;
+    }
 
-    while (getline(input, line)){
-        list->createItem(line);
+    //Tells user that either files were ok or that there were errors in the files.
+    if(errors == 0){
+        cout << "Files OK." << endl;
+    }else{
+        cout << "Found " << errors << " errors, please check your input files!" << endl;
     }
 
     list->displayAll();
-    input.close();
+    input_txt.close();
 }
