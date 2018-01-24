@@ -97,6 +97,7 @@ int ClParser::read_xml(string xml){
             }
         }
     }
+    input_xml.close();
     return 1;
 }
 
@@ -155,12 +156,12 @@ void ClParser::print(){
     cout << "Color:        " << color << endl;
     cout << "Format:       " << format << endl;
     cout << "Date:         " << date << endl;
-    if(pfactor[0] == '+'){
-        cout << "Push/Pull:    Pushed by " << pfactor << " stops." << endl;
-    }else if(pfactor[0] == '-'){
-        cout << "Push/Pull:    Pulled by " << pfactor << " stops." << endl;
-    }else{
-        cout << "Push/Pull:    Shot at box speed." << endl;
-    }
+//    if(pfactor[0] == '+'){
+//        cout << "Push/Pull:    Pushed by " << pfactor << " stops." << endl;
+//    }else if(pfactor[0] == '-'){
+//        cout << "Push/Pull:    Pulled by " << pfactor << " stops." << endl;
+//    }else{
+//        cout << "Push/Pull:    Shot at box speed." << endl;
+//    }
     cout << "-----------------" << endl;
 }
