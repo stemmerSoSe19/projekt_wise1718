@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE listFilms SYSTEM "films.dtd">
+<listFilms>
+	<film id="1">
+		<brand>Ilford</brand>
+		<type>FP4+</type>
+		<iso>125</iso>
+		<color>bw</color>
+	</film>
+	
+	<film id="2">
+		<brand>Ilford</brand>
+		<type>HP5+</type>
+		<iso>400</iso>
+		<color>bw</color>
+	</film>
+	
+	<film id="3">
+		<brand>Kodak</brand>
+		<type>Tri-X</type>
+		<iso>400</iso>
+		<color>bw</color>
+	</film>
+	
+	<film id="4">
+		<brand>Kodak</brand>
+		<type>Portra</type>
+		<iso>160</iso>
+		<color>color</color>
+	</film>
+	
+	<film id="5">
+		<brand>Fuji</brand>
+		<type>Velvia</type>
+		<iso>100</iso>
+		<color>slide</color>
+	</film>
+</listFilms>
+	
+		

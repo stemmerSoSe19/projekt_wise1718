@@ -1,0 +1,7 @@
+<!ELEMENT listFilms (film)*>
+<!ATTLIST film id CDATA "0">
+<!ELEMENT film (brand,type,iso,color)>
+<!ELEMENT brand (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT iso (#PCDATA)>
+<!ELEMENT color (#PCDATA)>

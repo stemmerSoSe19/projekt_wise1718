@@ -1,0 +1,30 @@
+<inventory>	
+	<film id="2">
+		<meta>
+			<brand>Ilford</brand>
+			<type>HP5+</type>
+			<iso>400</iso>
+			<color>bw</color>
+		</meta>
+
+		<fridge>
+		<!-- Imports date, format, and used ISO as attributes and puts calculated Push/Pull factor as value -->
+			<roll date="2017-12-14" format="120" iso="400">0</roll>
+			<roll date="2017-12-14" format="135" iso="400">0</roll>
+			<roll date="2017-12-13" format="135" iso="3200">+3</roll>
+		</fridge>  
+	</film>
+	
+	<film id="3">
+		<meta>
+			<brand>Kodak</brand>
+			<type>Tri-X</type>
+			<iso>400</iso>
+			<color>bw</color>
+		</meta>
+
+		<fridge>
+			<roll date="2018-01-05" format="135" iso="400">0</roll>
+		</fridge>  
+	</film>
+</inventory>
