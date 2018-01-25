@@ -26,6 +26,6 @@ int main(){
         cout << "Found " << errors << " errors, please check your input files!" << endl;
     }
 
-    list->displayAll();
+    list->printSearch(0, 0, 5, "Ilford", "120");
     input_txt.close();
 }

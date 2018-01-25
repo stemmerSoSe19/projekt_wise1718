@@ -5,13 +5,15 @@
 
 class ClParser{
     public:
+        void print();
         int read_xml(std::string xml);
         int read_txt(std::string line);
-        void print();
+        int search(int arg, std::string query);
+
         char *return_id()           { return id; }
-        ClParser *getNext()         { return next; }
         void setNext(ClParser *neu) { next = neu; }
-        //write();
+        ClParser *getNext()         { return next; }
+
 
     private:
         //Info from txt
@@ -25,7 +27,8 @@ class ClParser{
         char iso[5];
         char color[6];
         //Calculation
-        char pfactor[5];
+        char pf_sign[2];
+        double pfactor;
         //List
         ClParser *next;
 };

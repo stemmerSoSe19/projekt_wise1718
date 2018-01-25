@@ -59,8 +59,8 @@ int ClParser::read_xml(string xml){
                 strcpy(type, buffer);
                 state = 3;
                 break;
-
-            case 3:
+				
+			case 3:
                 line.erase(0, line.find('>') + 1);
                 for(int i = 0; i < int(line.find('<')); i++){
                     buffer[n] = line[i];
@@ -71,15 +71,17 @@ int ClParser::read_xml(string xml){
                 strcpy(iso, buffer);
 
                 if(atoi(iso_used) / atoi(iso) == 1){
-                    strcpy(pfactor,"0");
-
-//TODO: figure out a way to write calculation result into string.
-//                }else if(atoi(iso_used) / atoi(iso) > 1){
-//                    strcpy(pfactor,"+N");
-//                }else{
-//                    strcpy(pfactor,"-N");
+                    pfactor = 0;
+                    pf_sign[0] = '\n';
+                }else if(atoi(iso_used) / atoi(iso) > 1){
+                    pfactor = round(sqrt(atoi(iso_used)/atoi(iso)));
+                    pf_sign[0] = '+';
+                    pf_sign[1] = '\n';
+                }else{
+                    pfactor = round(sqrt(1 / (atof(iso_used) / atof(iso))));
+                    pf_sign[0] = '-';
+                    pf_sign[1] = '\n';
                 }
-
                 state = 4;
                 break;
 
@@ -149,19 +151,46 @@ int ClParser::read_txt(string line){
     return 1;
 }
 
+//Search object and return 1 if search successful, otherwise return 0
+int ClParser::search(int arg, std::string query){
+    switch(arg){
+        case 0:
+            if(query == brand) return 1;
+        case 1:
+            if(query == type) return 1;
+        case 2:
+            if(query == iso) return 1;
+        case 3:
+            if(query == iso_used) return 1;
+        case 4:
+            if(query == color) return 1;
+        case 5:
+            if(query == format) return 1;
+        case 6:
+            if(query == date) return 1;
+        default:
+            return 0;
+    }
+}
+
 void ClParser::print(){
+    string a;
     cout << "Brand:        " << brand << endl;
     cout << "Type:         " << type << endl;
     cout << "ISO/used:     " << iso << "/" << iso_used << endl;
     cout << "Color:        " << color << endl;
     cout << "Format:       " << format << endl;
     cout << "Date:         " << date << endl;
-//    if(pfactor[0] == '+'){
-//        cout << "Push/Pull:    Pushed by " << pfactor << " stops." << endl;
-//    }else if(pfactor[0] == '-'){
-//        cout << "Push/Pull:    Pulled by " << pfactor << " stops." << endl;
-//    }else{
-//        cout << "Push/Pull:    Shot at box speed." << endl;
-//    }
+    if(pf_sign[0] == '\n'){
+        a = "Shot at box speed.";
+        cout << "Push/Pull:    " << a << endl;
+    }
+    if(pfactor > 1 && pfactor != 0){
+        a = " stops";
+        cout << "Push/Pull:    " << pf_sign[0] << pfactor << a << endl;
+    }else if(pfactor == 1){
+        a = " stop";
+        cout << "Push/Pull:    " << pf_sign[0] << pfactor << a << endl;
+    }
     cout << "-----------------" << endl;
 }

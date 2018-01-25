@@ -4,8 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    clparser.cpp \
-    cllist.cpp
+    parserlib.cpp \
+    listlib.cpp
 
 HEADERS += \
     clparser.h \
