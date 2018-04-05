@@ -1,7 +1,10 @@
 <!ELEMENT listFilms (film)*>
 <!ATTLIST film id CDATA "0">
-<!ELEMENT film (brand,type,iso,color)>
+<!ELEMENT film (brand,type,iso,iso_used?,color,format?,date?)>
 <!ELEMENT brand (#PCDATA)>
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT iso (#PCDATA)>
+<!ELEMENT iso_used (#PCDATA)>
 <!ELEMENT color (#PCDATA)>
+<!ELEMENT format (#PCDATA)>
+<!ELEMENT date (#PCDATA)>

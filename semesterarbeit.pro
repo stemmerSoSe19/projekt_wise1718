@@ -5,8 +5,10 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     parserlib.cpp \
-    listlib.cpp
+    listlib.cpp \
+    menulib.cpp
 
 HEADERS += \
     clparser.h \
-    cllist.h
+    cllist.h \
+    clmenu.h

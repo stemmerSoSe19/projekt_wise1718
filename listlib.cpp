@@ -1,6 +1,7 @@
 #include "cllist.h"
 using namespace std;
 #include <string.h>
+#include <iostream>
 #include "clparser.h"
 
 int ClList::createItem(std::string line, std::string xml){
@@ -33,21 +34,38 @@ void ClList::printAll(){
 }
 
 //Searches through list and prints entries that match search parameters
-//log_op 0 = AND, log_op 1 = OR
+//log_op 0 = AND, log_op 1 = OR, log_op 2 = single search query
 //arg1 / arg2
 // 0 = brand, 1 = type, 2 = iso, 3 = iso_used, 4 = color, 5 = format, 6 = date
-void ClList::printSearch(int log_op, int arg1, int arg2, std::string query1, std::string query2){
+int ClList::printSearch(int log_op, int arg1, int arg2, std::string query1, std::string query2){
+    int check = 1;
     ClParser *temp= new ClParser;
     temp=head;
     while(temp!=NULL){
         switch(log_op){
             case 0:
-                if(temp->search(arg1, query1) == 1 && temp->search(arg2, query2)) temp->print();
+                if(temp->search(arg1, query1) == 1 && temp->search(arg2, query2)){
+                    temp->print();
+                }else{
+                    check = 0;
+                }
                 break;
             case 1:
-                if(temp->search(arg1, query1) == 1 || temp->search(arg2, query2)) temp->print();
+                if(temp->search(arg1, query1) == 1 || temp->search(arg2, query2)){
+                    temp->print();
+                }else{
+                    check = 0;
+                }
+                break;
+            case 2:
+                if(temp->search(arg1, query1) == 1){
+                    temp->print();
+                }else{
+                    check = 0;
+                }
                 break;
         }
         temp=temp->getNext();
     }
+    return check;
 }
