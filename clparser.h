@@ -14,8 +14,6 @@ class ClParser{
         void setNext(ClParser *neu) { next = neu; }
         ClParser *getNext()         { return next; }
 
-
-    private:
         //Info from txt
         char id[4];
         char iso_used[5];
@@ -29,6 +27,8 @@ class ClParser{
         //Calculation
         char pf_sign[2];
         double pfactor;
+
+    private:
         //List
         ClParser *next;
 };

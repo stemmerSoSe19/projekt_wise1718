@@ -5,9 +5,9 @@ using namespace std;
 #include <string>
 
 ClMenu::ClMenu(){
+    usercfg();
     init();
     while(splash());
-    return;
 }
 
 //Initializes the inventory and checks for errors
@@ -16,12 +16,9 @@ void ClMenu::init(){
     list = new ClList;
     ifstream input_txt;
     string line;
-    string xml = "films.xml";
-    string txt = "myList.txt";
-
-    input_txt.open(txt);
+    input_txt.open(txt_file);
     while (getline(input_txt, line)){
-        if(list->createItem(line, xml) == 0) errors++;
+        if(list->createItem(line, xml_file) == 0) errors++;
     }
 
     //Tells user that either files were ok or that there were errors in the files.
@@ -38,6 +35,7 @@ void ClMenu::init(){
 int ClMenu::splash(){
     int input;
     string choice;
+    string filename;
     cout << "Menu:" << endl;
     cout << "(1) Search" << endl;
     cout << "(2) Print inventory to screen" << endl;
@@ -55,22 +53,30 @@ int ClMenu::splash(){
             cout << "Print to (f)ile or return to (m)enu?: ";
             cin >> choice;
             if(choice == "f"){
-                list->printAll();
+                cout << "Please enter a filename: ";
+                cin >> filename;
+                list->printAllToFile(filename);
             }else{
                 break;
             }
             break;
         case 3:
+            cout << "Please enter a filename: ";
+            cin >> filename;
+            list->printAllToFile(filename);
             break;
+        case 4:
+            return 0;
         default:
             return 0;
     }
+    return 1;
 }
 
 //Menu search function, asks for user input and gives it to ClList::printSearch
 void ClMenu::search(){
     int log_op, arg1, arg2;
-    string choice, query1, query2;
+    string choice, query1, query2, filename;
     searchMenu();
     cin >> arg1;
     cout << "Please enter your search term: ";
@@ -87,16 +93,14 @@ void ClMenu::search(){
     }else{
         log_op = 2;
     }
-    if(list->printSearch(log_op, arg1, arg2, query1, query2)){
-        cout << "Print to (f)ile or return to (m)enu?: ";
-        cin >> choice;
-        if(choice == "f"){
-            list->printSearch(log_op, arg1, arg2, query1, query2);
-        }else{
-            return;
-        }
+    list->printSearch(log_op, arg1, arg2, query1, query2);
+    cout << "Print to (f)ile or return to (m)enu?: ";
+    cin >> choice;
+    if(choice == "f"){
+        cout << "Please enter a filename: ";
+        cin >> filename;
+        list->printSearchToFile(filename, log_op, arg1, arg2, query1, query2);
     }else{
-        cout << "No matches found." << endl;
         return;
     }
 }
@@ -110,4 +114,36 @@ void ClMenu::searchMenu(){
     cout << "(5) Format" << endl;
     cout << "(6) Date (YYYY-MM-DD)" << endl;
     cout << "Please pick your parameter: ";
+}
+
+void ClMenu::usercfg(){
+    ifstream inConfig;
+    inConfig.open("config");
+    if(inConfig.is_open()){
+        string line;
+        getline(inConfig, line);
+        if(line.empty()){
+            ofstream outConfig ("config");
+            cout << "Please enter the filename of your xml_file-Database: ";
+            cin >> xml_file;
+            cout << "Please enter the filename of your inventory txt_file-File: ";
+            cin >> txt_file;
+            outConfig << xml_file << "\n" << txt_file << "\n" << endl;
+            outConfig.close();
+            return;
+        }
+        xml_file = line;
+        getline(inConfig, line);
+        txt_file = line;
+        cout << "Created database with files from last session: " << xml_file << ", " << txt_file << endl;
+        inConfig.close();
+    }else{
+        ofstream outConfig ("config");
+        cout << "Please enter the filename of your xml-Database: ";
+        cin >> xml_file;
+        cout << "Please enter the filename of your inventory txt-File: ";
+        cin >> txt_file;
+        outConfig << xml_file << "\n" << txt_file << "\n" << endl;
+        outConfig.close();
+    }
 }

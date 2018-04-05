@@ -8,7 +8,9 @@ class ClList{
         ClList() { head=NULL; tail=NULL; }
         int createItem(std::string line, std::string xml);
         void printAll();
-        int printSearch(int log_op, int arg1, int arg2, std::string query1, std::string query2);
+        void printAllToFile(std::string filename);
+        void printSearch(int log_op, int arg1, int arg2, std::string query1, std::string query2);
+        void printSearchToFile(std::string filename, int log_op, int arg1, int arg2, std::string query1, std::string query2);
 
     private:
         ClParser *head, *tail;

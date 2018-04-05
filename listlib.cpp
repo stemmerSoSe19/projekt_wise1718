@@ -33,12 +33,93 @@ void ClList::printAll(){
     }
 }
 
+void ClList::printAllToFile(std::string filename){
+    ClParser *temp= new ClParser;
+    temp=head;
+    ofstream output (filename);
+    output << "<?xml version='1.0'?>\n";
+    output << "<!DOCTYPE listFilms SYSTEM 'films.dtd'>\n";
+    output << "<listFilms>\n";
+    while(temp!=NULL){
+        output << "<film id=" << "'" << temp->id << "'>\n";
+        output << "<brand>" << temp->brand << "</brand>\n";
+        output << "<type>" << temp->type << "</type>\n";
+        output << "<iso>" << temp->iso << "</iso>\n";
+        output << "<iso_used>" << temp->iso_used << "</iso_used>\n";
+        output << "<color>" << temp->color << "</color>\n";
+        output << "<format>" << temp->format << "</format>\n";
+        output << "<date>" << temp->date << "</date>\n";
+        output << "<pfactor>" << temp->pfactor << "</pfactor>\n";
+        output << "</film>\n";
+        temp=temp->getNext();
+    }
+    output << "</listFilms>\n";
+    output.close();
+}
+
 //Searches through list and prints entries that match search parameters
 //log_op 0 = AND, log_op 1 = OR, log_op 2 = single search query
 //arg1 / arg2
 // 0 = brand, 1 = type, 2 = iso, 3 = iso_used, 4 = color, 5 = format, 6 = date
-int ClList::printSearch(int log_op, int arg1, int arg2, std::string query1, std::string query2){
-    int check = 1;
+void ClList::printSearchToFile(std::string filename, int log_op, int arg1, int arg2, std::string query1, std::string query2){
+    ClParser *temp= new ClParser;
+    temp=head;
+    ofstream output (filename);
+    output << "<?xml version='1.0'?>\n";
+    output << "<!DOCTYPE listFilms SYSTEM 'films.dtd'>\n";
+    output << "<listFilms>\n";
+    while(temp!=NULL){
+        switch(log_op){
+            case 0:
+                if(temp->search(arg1, query1) == 1 && temp->search(arg2, query2)){
+                    output << "<film id=" << "'" << temp->id << "'>\n";
+                    output << "<brand>" << temp->brand << "</brand>\n";
+                    output << "<type>" << temp->type << "</type>\n";
+                    output << "<iso>" << temp->iso << "</iso>\n";
+                    output << "<iso_used>" << temp->iso_used << "</iso_used>\n";
+                    output << "<color>" << temp->color << "</color>\n";
+                    output << "<format>" << temp->format << "</format>\n";
+                    output << "<date>" << temp->date << "</date>\n";
+                    output << "<pfactor>" << temp->pfactor << "</pfactor>\n";
+                    output << "</film>\n";
+                }
+                break;
+            case 1:
+                if(temp->search(arg1, query1) == 1 || temp->search(arg2, query2)){
+                    output << "<film id=" << "'" << temp->id << "'>\n";
+                    output << "<brand>" << temp->brand << "</brand>\n";
+                    output << "<type>" << temp->type << "</type>\n";
+                    output << "<iso>" << temp->iso << "</iso>\n";
+                    output << "<iso_used>" << temp->iso_used << "</iso_used>\n";
+                    output << "<color>" << temp->color << "</color>\n";
+                    output << "<format>" << temp->format << "</format>\n";
+                    output << "<date>" << temp->date << "</date>\n";
+                    output << "<pfactor>" << temp->pfactor << "</pfactor>\n";
+                    output << "</film>\n";
+                }
+                break;
+            case 2:
+                if(temp->search(arg1, query1) == 1){
+                    output << "<film id=" << "'" << temp->id << "'>\n";
+                    output << "<brand>" << temp->brand << "</brand>\n";
+                    output << "<type>" << temp->type << "</type>\n";
+                    output << "<iso>" << temp->iso << "</iso>\n";
+                    output << "<iso_used>" << temp->iso_used << "</iso_used>\n";
+                    output << "<color>" << temp->color << "</color>\n";
+                    output << "<format>" << temp->format << "</format>\n";
+                    output << "<date>" << temp->date << "</date>\n";
+                    output << "<pfactor>" << temp->pfactor << "</pfactor>\n";
+                    output << "</film>\n";
+                }
+                break;
+        }
+        temp=temp->getNext();
+    }
+    output << "</listFilms>\n";
+    output.close();
+}
+
+void ClList::printSearch(int log_op, int arg1, int arg2, std::string query1, std::string query2){
     ClParser *temp= new ClParser;
     temp=head;
     while(temp!=NULL){
@@ -46,26 +127,19 @@ int ClList::printSearch(int log_op, int arg1, int arg2, std::string query1, std:
             case 0:
                 if(temp->search(arg1, query1) == 1 && temp->search(arg2, query2)){
                     temp->print();
-                }else{
-                    check = 0;
                 }
                 break;
             case 1:
                 if(temp->search(arg1, query1) == 1 || temp->search(arg2, query2)){
                     temp->print();
-                }else{
-                    check = 0;
                 }
                 break;
             case 2:
                 if(temp->search(arg1, query1) == 1){
                     temp->print();
-                }else{
-                    check = 0;
                 }
                 break;
         }
         temp=temp->getNext();
     }
-    return check;
 }
