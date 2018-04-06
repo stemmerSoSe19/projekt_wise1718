@@ -124,9 +124,9 @@ void ClMenu::usercfg(){
         getline(inConfig, line);
         if(line.empty()){
             ofstream outConfig ("config");
-            cout << "Please enter the filename of your xml_file-Database: ";
+            cout << "Please enter the filename of your XML-Database: ";
             cin >> xml_file;
-            cout << "Please enter the filename of your inventory txt_file-File: ";
+            cout << "Please enter the filename of your inventory TXT-File: ";
             cin >> txt_file;
             outConfig << xml_file << "\n" << txt_file << "\n" << endl;
             outConfig.close();
@@ -139,9 +139,9 @@ void ClMenu::usercfg(){
         inConfig.close();
     }else{
         ofstream outConfig ("config");
-        cout << "Please enter the filename of your xml-Database: ";
+        cout << "Please enter the filename of your XML-Database: ";
         cin >> xml_file;
-        cout << "Please enter the filename of your inventory txt-File: ";
+        cout << "Please enter the filename of your inventory TXT-File: ";
         cin >> txt_file;
         outConfig << xml_file << "\n" << txt_file << "\n" << endl;
         outConfig.close();
